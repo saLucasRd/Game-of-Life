@@ -1,7 +1,9 @@
+import os
 import random
+import time
 
-width:int = 10
-height:int = 8
+width:int = 30
+height:int = 30
 
 def dead_state(height:int, width:int):
     return [[0] * width for _ in range(height)]
@@ -20,16 +22,12 @@ def random_state(height:int, width:int):
 
     return state
 
-def render():
-    a_random_state = random_state(height, width)
-    for i in range(height):
+def render(state):
+    os.system("clear")
+    for row in state:
+        print(" ".join("■" if cell else "□" for cell in row))
+    print()
 
-        for j in range(width):
-            if a_random_state[i][j] == 1:
-                print("■", end=" ")
-            else:
-                print("□", end=" ")
-        print()
 
 def next_board_state(state:list, height:int, width:int):
     new_state = dead_state(height, width)
@@ -40,12 +38,14 @@ def next_board_state(state:list, height:int, width:int):
 
             if state[i][j] == 1:
                 #underpop overpop check
-                if live_neighbours < 2 or live_neighbours > 3:
-                    new_state[i][j] = 0
-                else:
+                if live_neighbours in [2, 3]:
                     new_state[i][j] = 1
             else:
-                new_state[i][j] = 1
+                if live_neighbours == 3:
+                    new_state[i][j] = 1
+
+
+    return new_state
 
 def count_neighbours(state:list, i:int, j:int, height:int, width:int):
     # faz a checagem dos vizinhos nessa referencia
@@ -54,6 +54,8 @@ def count_neighbours(state:list, i:int, j:int, height:int, width:int):
     # (+1,-1)  (+1,0)  (+1,+1)
 
     neighbors = [(-1, -1), (-1, 0), (-1, +1), (0, -1), (0, +1), (+1, -1), (+1, 0), (+1, +1)]
+
+
     live_neighbors = 0
 
     for di, dj in neighbors:
@@ -62,8 +64,17 @@ def count_neighbours(state:list, i:int, j:int, height:int, width:int):
         if 0 <= ni < height and 0 <= nj < width:
             live_neighbors += state[ni][nj]
 
+
+
     return live_neighbors
 
 
+def game_of_life(height, width, generations=10, delay=0.7):
+    state = random_state(height, width)
 
-render()
+    for _ in range(generations):
+        render(state)
+        state = next_board_state(state, height, width)
+        time.sleep(delay)
+
+game_of_life(height, width, generations = 20)
