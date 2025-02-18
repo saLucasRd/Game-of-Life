@@ -8,4 +8,7 @@ The game follows four basic rules:
 3. Any living cell with more than three living neighbors dies of overpopulation.
 4. Any dead cell with exactly three living neighbors becomes a living cell (birth).
 ---
+![alt-text](gif.gif)
+
+
 This project is being developed based on the ideas in the blog [Robert Heaton - Game of Life](https://robertheaton.com/2018/07/20/project-2-game-of-life/).
